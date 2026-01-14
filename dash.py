@@ -10,7 +10,6 @@ warnings.filterwarnings('ignore')
 # For forecasting
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
-from statsmodels.tsa.statespace.sarimax import SARIMAX
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
@@ -332,27 +331,30 @@ if 'run_forecast_btn' in dir() and run_forecast_btn:
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("**SARIMAX Model**")
+            st.markdown("**Exponential Smoothing Model**")
             try:
-                sarimax_model = SARIMAX(
-                    train_data,
-                    order=(1, 1, 1),
-                    seasonal_order=(1, 1, 1, 24),
-                    enforce_stationarity=False,
-                    enforce_invertibility=False
-                )
-                sarimax_results = sarimax_model.fit(disp=False, maxiter=200)
-                sarimax_forecast = sarimax_results.get_forecast(steps=steps).predicted_mean.values
+                # Simple exponential smoothing forecast
+                alpha = 0.3
+                forecast_es = []
+                current_val = train_data[-1]
+                
+                for _ in range(steps):
+                    # Weighted average of last value and current prediction
+                    next_val = alpha * current_val + (1 - alpha) * np.mean(train_data[-24:])
+                    forecast_es.append(next_val)
+                    current_val = next_val
+                
+                forecast_es = np.array(forecast_es)
                 
                 if len(test_data) >= steps:
-                    rmse_sarimax = np.sqrt(mean_squared_error(test_data[:steps], sarimax_forecast))
-                    mae_sarimax = mean_absolute_error(test_data[:steps], sarimax_forecast)
-                    st.metric("RMSE", f"{rmse_sarimax:.2f}")
-                    st.metric("MAE", f"{mae_sarimax:.2f}")
-                st.success("✅ SARIMAX completed")
+                    rmse_es = np.sqrt(mean_squared_error(test_data[:steps], forecast_es))
+                    mae_es = mean_absolute_error(test_data[:steps], forecast_es)
+                    st.metric("RMSE", f"{rmse_es:.2f}")
+                    st.metric("MAE", f"{mae_es:.2f}")
+                st.success("✅ Exponential Smoothing completed")
             except Exception as e:
-                st.error(f"❌ SARIMAX error: {str(e)[:100]}")
-                sarimax_forecast = None
+                st.error(f"❌ Error: {str(e)[:100]}")
+                forecast_es = None
         
         with col2:
             st.markdown("**LSTM Model**")
@@ -418,16 +420,16 @@ if 'run_forecast_btn' in dir() and run_forecast_btn:
             line=dict(color='black', width=2)
         ))
         
-        if sarimax_forecast is not None:
+        if 'forecast_es' in dir() and forecast_es is not None:
             fig_forecast.add_trace(go.Scatter(
                 x=hours_range,
-                y=sarimax_forecast,
+                y=forecast_es,
                 mode='lines',
-                name='SARIMAX Forecast',
+                name='Exponential Smoothing',
                 line=dict(color='#FF6B6B', width=2, dash='dash')
             ))
         
-        if lstm_forecast is not None:
+        if 'lstm_forecast' in dir() and lstm_forecast is not None:
             fig_forecast.add_trace(go.Scatter(
                 x=hours_range,
                 y=lstm_forecast,
