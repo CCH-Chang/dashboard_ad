@@ -175,65 +175,65 @@ with col2:
 
 st.markdown("---")
 
-# Row 2: Temperature analysis by city
-st.subheader("🏙️ Temperature Analysis by City")
+# # Row 2: Temperature analysis by city
+# st.subheader("🏙️ Temperature Analysis by City")
 
-cities = {
-    'Barcelona': 'temp_ Barcelona',
-    'Bilbao': 'temp_Bilbao',
-    'Madrid': 'temp_Madrid',
-    'Seville': 'temp_Seville',
-    'Valencia': 'temp_Valencia'
-}
+# cities = {
+#     'Barcelona': 'temp_ Barcelona',
+#     'Bilbao': 'temp_Bilbao',
+#     'Madrid': 'temp_Madrid',
+#     'Seville': 'temp_Seville',
+#     'Valencia': 'temp_Valencia'
+# }
 
-fig_cities = go.Figure()
-for city, col_name in cities.items():
-    fig_cities.add_trace(go.Scatter(
-        x=filtered_df['time'],
-        y=filtered_df[col_name],
-        mode='lines',
-        name=city,
-        line=dict(width=2)
-    ))
+# fig_cities = go.Figure()
+# for city, col_name in cities.items():
+#     fig_cities.add_trace(go.Scatter(
+#         x=filtered_df['time'],
+#         y=filtered_df[col_name],
+#         mode='lines',
+#         name=city,
+#         line=dict(width=2)
+#     ))
 
-fig_cities.update_layout(
-    title='',
-    xaxis_title='Time',
-    yaxis_title='Temperature (K)',
-    hovermode='x unified',
-    template='plotly_white',
-    height=400
-)
-st.plotly_chart(fig_cities, use_container_width=True)
+# fig_cities.update_layout(
+#     title='',
+#     xaxis_title='Time',
+#     yaxis_title='Temperature (K)',
+#     hovermode='x unified',
+#     template='plotly_white',
+#     height=400
+# )
+# st.plotly_chart(fig_cities, use_container_width=True)
 
-st.markdown("---")
+# st.markdown("---")
 
-# SECTION: CITY TEMPERATURE SELECTOR
-if 'selected_cities' in dir() and selected_cities:
-    st.subheader("🏙️ Selected Cities Temperature Trend")
+# # SECTION: CITY TEMPERATURE SELECTOR
+# if 'selected_cities' in dir() and selected_cities:
+#     st.subheader("🏙️ Selected Cities Temperature Trend")
     
-    fig_selected = go.Figure()
-    for city in selected_cities:
-        col_name = cities_dict[city]
-        fig_selected.add_trace(go.Scatter(
-            x=filtered_df['time'],
-            y=filtered_df[col_name],
-            mode='lines',
-            name=city,
-            line=dict(width=2.5)
-        ))
+#     fig_selected = go.Figure()
+#     for city in selected_cities:
+#         col_name = cities_dict[city]
+#         fig_selected.add_trace(go.Scatter(
+#             x=filtered_df['time'],
+#             y=filtered_df[col_name],
+#             mode='lines',
+#             name=city,
+#             line=dict(width=2.5)
+#         ))
     
-    fig_selected.update_layout(
-        title='',
-        xaxis_title='Time',
-        yaxis_title='Temperature (K)',
-        hovermode='x unified',
-        template='plotly_white',
-        height=500
-    )
-    st.plotly_chart(fig_selected, use_container_width=True)
+#     fig_selected.update_layout(
+#         title='',
+#         xaxis_title='Time',
+#         yaxis_title='Temperature (K)',
+#         hovermode='x unified',
+#         template='plotly_white',
+#         height=500
+#     )
+#     st.plotly_chart(fig_selected, use_container_width=True)
     
-    st.markdown("---")
+#     st.markdown("---")
 
 # # Row 3: Load and Temperature correlation
 # st.subheader("📊 Load vs Average Temperature Correlation")
