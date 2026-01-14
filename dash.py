@@ -235,221 +235,221 @@ if 'selected_cities' in dir() and selected_cities:
     
     st.markdown("---")
 
-# Row 3: Load and Temperature correlation
-st.subheader("📊 Load vs Average Temperature Correlation")
+# # Row 3: Load and Temperature correlation
+# st.subheader("📊 Load vs Average Temperature Correlation")
 
-fig_correlation = go.Figure()
-fig_correlation.add_trace(go.Scatter(
-    x=filtered_df['temp_avg'],
-    y=filtered_df['total load actual'],
-    mode='markers',
-    marker=dict(
-        size=5,
-        color=filtered_df['temp_avg'],
-        colorscale='Viridis',
-        showscale=True,
-        colorbar=dict(title="Temp (K)")
-    ),
-    name='Data Points'
-))
+# fig_correlation = go.Figure()
+# fig_correlation.add_trace(go.Scatter(
+#     x=filtered_df['temp_avg'],
+#     y=filtered_df['total load actual'],
+#     mode='markers',
+#     marker=dict(
+#         size=5,
+#         color=filtered_df['temp_avg'],
+#         colorscale='Viridis',
+#         showscale=True,
+#         colorbar=dict(title="Temp (K)")
+#     ),
+#     name='Data Points'
+# ))
 
-fig_correlation.update_layout(
-    title='',
-    xaxis_title='Average Temperature (K)',
-    yaxis_title='Load (MW)',
-    hovermode='closest',
-    template='plotly_white',
-    height=400
-)
-st.plotly_chart(fig_correlation, use_container_width=True)
+# fig_correlation.update_layout(
+#     title='',
+#     xaxis_title='Average Temperature (K)',
+#     yaxis_title='Load (MW)',
+#     hovermode='closest',
+#     template='plotly_white',
+#     height=400
+# )
+# st.plotly_chart(fig_correlation, use_container_width=True)
 
-st.markdown("---")
+# st.markdown("---")
 
-# Row 4: Analysis by hour and day
-col1, col2 = st.columns(2)
+# # Row 4: Analysis by hour and day
+# col1, col2 = st.columns(2)
 
-with col1:
-    st.subheader("⏰ Average Load by Hour")
-    hourly_avg = filtered_df.groupby('hour')['total load actual'].mean().reset_index()
-    fig_hourly = px.bar(hourly_avg, x='hour', y='total load actual',
-                        labels={'hour': 'Hour', 'total load actual': 'Average Load (MW)'},
-                        color='total load actual',
-                        color_continuous_scale='Blues')
-    fig_hourly.update_layout(template='plotly_white', height=400, showlegend=False)
-    st.plotly_chart(fig_hourly, use_container_width=True)
+# with col1:
+#     st.subheader("⏰ Average Load by Hour")
+#     hourly_avg = filtered_df.groupby('hour')['total load actual'].mean().reset_index()
+#     fig_hourly = px.bar(hourly_avg, x='hour', y='total load actual',
+#                         labels={'hour': 'Hour', 'total load actual': 'Average Load (MW)'},
+#                         color='total load actual',
+#                         color_continuous_scale='Blues')
+#     fig_hourly.update_layout(template='plotly_white', height=400, showlegend=False)
+#     st.plotly_chart(fig_hourly, use_container_width=True)
 
-with col2:
-    st.subheader("📅 Average Load by Day of Week")
-    day_names = {0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}
-    daily_avg = filtered_df.groupby('day_of_week')['total load actual'].mean().reset_index()
-    daily_avg['day_name'] = daily_avg['day_of_week'].map(day_names)
-    fig_daily = px.bar(daily_avg, x='day_name', y='total load actual',
-                       labels={'day_name': 'Day', 'total load actual': 'Average Load (MW)'},
-                       color='total load actual',
-                       color_continuous_scale='Reds')
-    fig_daily.update_layout(template='plotly_white', height=400, showlegend=False)
-    st.plotly_chart(fig_daily, use_container_width=True)
+# with col2:
+#     st.subheader("📅 Average Load by Day of Week")
+#     day_names = {0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}
+#     daily_avg = filtered_df.groupby('day_of_week')['total load actual'].mean().reset_index()
+#     daily_avg['day_name'] = daily_avg['day_of_week'].map(day_names)
+#     fig_daily = px.bar(daily_avg, x='day_name', y='total load actual',
+#                        labels={'day_name': 'Day', 'total load actual': 'Average Load (MW)'},
+#                        color='total load actual',
+#                        color_continuous_scale='Reds')
+#     fig_daily.update_layout(template='plotly_white', height=400, showlegend=False)
+#     st.plotly_chart(fig_daily, use_container_width=True)
 
-st.markdown("---")
+# st.markdown("---")
 
-# Data table
-if st.sidebar.checkbox("Show raw data", value=False):
-    st.subheader("📋 Raw Data")
-    st.dataframe(filtered_df, use_container_width=True)
+# # Data table
+# if st.sidebar.checkbox("Show raw data", value=False):
+#     st.subheader("📋 Raw Data")
+#     st.dataframe(filtered_df, use_container_width=True)
 
-# Statistics
-with st.sidebar.expander("📈 Statistics Summary"):
-    st.write(f"**Data Range:** {date_min.date()} to {date_max.date()}")
-    st.write(f"**Selected Range:** {len(filtered_df)} records")
-    st.write(f"\n**Energy Load Statistics:**")
-    st.write(f"- Minimum: {filtered_df['total load actual'].min():,.0f} MW")
-    st.write(f"- Average: {filtered_df['total load actual'].mean():,.0f} MW")
-    st.write(f"- Maximum: {filtered_df['total load actual'].max():,.0f} MW")
-    st.write(f"\n**Temperature Statistics (K):**")
-    st.write(f"- Minimum: {filtered_df['temp_avg'].min():.2f}")
-    st.write(f"- Average: {filtered_df['temp_avg'].mean():.2f}")
-    st.write(f"- Maximum: {filtered_df['temp_avg'].max():.2f}")
+# # Statistics
+# with st.sidebar.expander("📈 Statistics Summary"):
+#     st.write(f"**Data Range:** {date_min.date()} to {date_max.date()}")
+#     st.write(f"**Selected Range:** {len(filtered_df)} records")
+#     st.write(f"\n**Energy Load Statistics:**")
+#     st.write(f"- Minimum: {filtered_df['total load actual'].min():,.0f} MW")
+#     st.write(f"- Average: {filtered_df['total load actual'].mean():,.0f} MW")
+#     st.write(f"- Maximum: {filtered_df['total load actual'].max():,.0f} MW")
+#     st.write(f"\n**Temperature Statistics (K):**")
+#     st.write(f"- Minimum: {filtered_df['temp_avg'].min():.2f}")
+#     st.write(f"- Average: {filtered_df['temp_avg'].mean():.2f}")
+#     st.write(f"- Maximum: {filtered_df['temp_avg'].max():.2f}")
 
-# SECTION: FORECASTING
-st.markdown("---")
-st.markdown("---")
-st.title("🔮 Energy Load Forecasting")
+# # SECTION: FORECASTING
+# st.markdown("---")
+# st.markdown("---")
+# st.title("🔮 Energy Load Forecasting")
 
-if 'run_forecast_btn' in dir() and run_forecast_btn:
-    st.info("Running forecasts... Please wait (this may take a few minutes)")
+# if 'run_forecast_btn' in dir() and run_forecast_btn:
+#     st.info("Running forecasts... Please wait (this may take a few minutes)")
     
-    # Prepare data
-    data = df['total load actual'].values.astype(float)
-    split_point = int(len(data) * train_ratio)
-    train_data = data[:split_point]
-    test_data = data[split_point:]
+#     # Prepare data
+#     data = df['total load actual'].values.astype(float)
+#     split_point = int(len(data) * train_ratio)
+#     train_data = data[:split_point]
+#     test_data = data[split_point:]
     
-    for days in sorted(forecast_days):
-        steps = days * 24
+#     for days in sorted(forecast_days):
+#         steps = days * 24
         
-        st.subheader(f"📊 {days}-Day Forecast ({steps} hours)")
-        col1, col2 = st.columns(2)
+#         st.subheader(f"📊 {days}-Day Forecast ({steps} hours)")
+#         col1, col2 = st.columns(2)
         
-        with col1:
-            st.markdown("**Exponential Smoothing Model**")
-            try:
-                # Simple exponential smoothing forecast
-                alpha = 0.3
-                forecast_es = []
-                current_val = train_data[-1]
+#         with col1:
+#             st.markdown("**Exponential Smoothing Model**")
+#             try:
+#                 # Simple exponential smoothing forecast
+#                 alpha = 0.3
+#                 forecast_es = []
+#                 current_val = train_data[-1]
                 
-                for _ in range(steps):
-                    # Weighted average of last value and current prediction
-                    next_val = alpha * current_val + (1 - alpha) * np.mean(train_data[-24:])
-                    forecast_es.append(next_val)
-                    current_val = next_val
+#                 for _ in range(steps):
+#                     # Weighted average of last value and current prediction
+#                     next_val = alpha * current_val + (1 - alpha) * np.mean(train_data[-24:])
+#                     forecast_es.append(next_val)
+#                     current_val = next_val
                 
-                forecast_es = np.array(forecast_es)
+#                 forecast_es = np.array(forecast_es)
                 
-                if len(test_data) >= steps:
-                    rmse_es = np.sqrt(mean_squared_error(test_data[:steps], forecast_es))
-                    mae_es = mean_absolute_error(test_data[:steps], forecast_es)
-                    st.metric("RMSE", f"{rmse_es:.2f}")
-                    st.metric("MAE", f"{mae_es:.2f}")
-                st.success("✅ Exponential Smoothing completed")
-            except Exception as e:
-                st.error(f"❌ Error: {str(e)[:100]}")
-                forecast_es = None
+#                 if len(test_data) >= steps:
+#                     rmse_es = np.sqrt(mean_squared_error(test_data[:steps], forecast_es))
+#                     mae_es = mean_absolute_error(test_data[:steps], forecast_es)
+#                     st.metric("RMSE", f"{rmse_es:.2f}")
+#                     st.metric("MAE", f"{mae_es:.2f}")
+#                 st.success("✅ Exponential Smoothing completed")
+#             except Exception as e:
+#                 st.error(f"❌ Error: {str(e)[:100]}")
+#                 forecast_es = None
         
-        with col2:
-            st.markdown("**LSTM Model**")
-            try:
-                # Scale data
-                scaler = MinMaxScaler(feature_range=(0, 1))
-                train_scaled = scaler.fit_transform(train_data.reshape(-1, 1))
+#         with col2:
+#             st.markdown("**LSTM Model**")
+#             try:
+#                 # Scale data
+#                 scaler = MinMaxScaler(feature_range=(0, 1))
+#                 train_scaled = scaler.fit_transform(train_data.reshape(-1, 1))
                 
-                # Create sequences
-                lookback = 24
-                X_train, y_train = [], []
-                for i in range(len(train_scaled) - lookback):
-                    X_train.append(train_scaled[i:(i + lookback)])
-                    y_train.append(train_scaled[i + lookback])
-                X_train, y_train = np.array(X_train), np.array(y_train)
+#                 # Create sequences
+#                 lookback = 24
+#                 X_train, y_train = [], []
+#                 for i in range(len(train_scaled) - lookback):
+#                     X_train.append(train_scaled[i:(i + lookback)])
+#                     y_train.append(train_scaled[i + lookback])
+#                 X_train, y_train = np.array(X_train), np.array(y_train)
                 
-                # Build model
-                lstm_model = Sequential([
-                    LSTM(64, activation='relu', input_shape=(lookback, 1), return_sequences=True),
-                    Dropout(0.2),
-                    LSTM(32, activation='relu', return_sequences=False),
-                    Dropout(0.2),
-                    Dense(16, activation='relu'),
-                    Dense(1)
-                ])
-                lstm_model.compile(optimizer=Adam(learning_rate=0.001), loss='mse')
+#                 # Build model
+#                 lstm_model = Sequential([
+#                     LSTM(64, activation='relu', input_shape=(lookback, 1), return_sequences=True),
+#                     Dropout(0.2),
+#                     LSTM(32, activation='relu', return_sequences=False),
+#                     Dropout(0.2),
+#                     Dense(16, activation='relu'),
+#                     Dense(1)
+#                 ])
+#                 lstm_model.compile(optimizer=Adam(learning_rate=0.001), loss='mse')
                 
-                early_stop = EarlyStopping(monitor='loss', patience=5, restore_best_weights=True)
-                lstm_model.fit(X_train, y_train, epochs=50, batch_size=32, callbacks=[early_stop], verbose=0)
+#                 early_stop = EarlyStopping(monitor='loss', patience=5, restore_best_weights=True)
+#                 lstm_model.fit(X_train, y_train, epochs=50, batch_size=32, callbacks=[early_stop], verbose=0)
                 
-                # Forecast
-                last_seq = train_scaled[-lookback:].copy()
-                lstm_forecast = []
-                current_seq = last_seq.copy()
+#                 # Forecast
+#                 last_seq = train_scaled[-lookback:].copy()
+#                 lstm_forecast = []
+#                 current_seq = last_seq.copy()
                 
-                for _ in range(steps):
-                    pred = lstm_model.predict(current_seq.reshape(1, lookback, 1), verbose=0)[0, 0]
-                    lstm_forecast.append(pred)
-                    current_seq = np.append(current_seq[1:], [[pred]], axis=0)
+#                 for _ in range(steps):
+#                     pred = lstm_model.predict(current_seq.reshape(1, lookback, 1), verbose=0)[0, 0]
+#                     lstm_forecast.append(pred)
+#                     current_seq = np.append(current_seq[1:], [[pred]], axis=0)
                 
-                lstm_forecast = scaler.inverse_transform(np.array(lstm_forecast).reshape(-1, 1)).flatten()
+#                 lstm_forecast = scaler.inverse_transform(np.array(lstm_forecast).reshape(-1, 1)).flatten()
                 
-                if len(test_data) >= steps:
-                    rmse_lstm = np.sqrt(mean_squared_error(test_data[:steps], lstm_forecast))
-                    mae_lstm = mean_absolute_error(test_data[:steps], lstm_forecast)
-                    st.metric("RMSE", f"{rmse_lstm:.2f}")
-                    st.metric("MAE", f"{mae_lstm:.2f}")
-                st.success("✅ LSTM completed")
-            except Exception as e:
-                st.error(f"❌ LSTM error: {str(e)[:100]}")
-                lstm_forecast = None
+#                 if len(test_data) >= steps:
+#                     rmse_lstm = np.sqrt(mean_squared_error(test_data[:steps], lstm_forecast))
+#                     mae_lstm = mean_absolute_error(test_data[:steps], lstm_forecast)
+#                     st.metric("RMSE", f"{rmse_lstm:.2f}")
+#                     st.metric("MAE", f"{mae_lstm:.2f}")
+#                 st.success("✅ LSTM completed")
+#             except Exception as e:
+#                 st.error(f"❌ LSTM error: {str(e)[:100]}")
+#                 lstm_forecast = None
         
-        # Plot comparison
-        st.markdown("---")
-        fig_forecast = go.Figure()
+#         # Plot comparison
+#         st.markdown("---")
+#         fig_forecast = go.Figure()
         
-        hours_range = np.arange(steps)
-        fig_forecast.add_trace(go.Scatter(
-            x=hours_range,
-            y=test_data[:steps],
-            mode='lines',
-            name='Actual Test Data',
-            line=dict(color='black', width=2)
-        ))
+#         hours_range = np.arange(steps)
+#         fig_forecast.add_trace(go.Scatter(
+#             x=hours_range,
+#             y=test_data[:steps],
+#             mode='lines',
+#             name='Actual Test Data',
+#             line=dict(color='black', width=2)
+#         ))
         
-        if 'forecast_es' in dir() and forecast_es is not None:
-            fig_forecast.add_trace(go.Scatter(
-                x=hours_range,
-                y=forecast_es,
-                mode='lines',
-                name='Exponential Smoothing',
-                line=dict(color='#FF6B6B', width=2, dash='dash')
-            ))
+#         if 'forecast_es' in dir() and forecast_es is not None:
+#             fig_forecast.add_trace(go.Scatter(
+#                 x=hours_range,
+#                 y=forecast_es,
+#                 mode='lines',
+#                 name='Exponential Smoothing',
+#                 line=dict(color='#FF6B6B', width=2, dash='dash')
+#             ))
         
-        if 'lstm_forecast' in dir() and lstm_forecast is not None:
-            fig_forecast.add_trace(go.Scatter(
-                x=hours_range,
-                y=lstm_forecast,
-                mode='lines',
-                name='LSTM Forecast',
-                line=dict(color='#4ECDC4', width=2, dash='dash')
-            ))
+#         if 'lstm_forecast' in dir() and lstm_forecast is not None:
+#             fig_forecast.add_trace(go.Scatter(
+#                 x=hours_range,
+#                 y=lstm_forecast,
+#                 mode='lines',
+#                 name='LSTM Forecast',
+#                 line=dict(color='#4ECDC4', width=2, dash='dash')
+#             ))
         
-        fig_forecast.update_layout(
-            title='',
-            xaxis_title='Hours Ahead',
-            yaxis_title='Load (MW)',
-            hovermode='x unified',
-            template='plotly_white',
-            height=400
-        )
-        st.plotly_chart(fig_forecast, use_container_width=True)
-        st.markdown("---")
+#         fig_forecast.update_layout(
+#             title='',
+#             xaxis_title='Hours Ahead',
+#             yaxis_title='Load (MW)',
+#             hovermode='x unified',
+#             template='plotly_white',
+#             height=400
+#         )
+#         st.plotly_chart(fig_forecast, use_container_width=True)
+#         st.markdown("---")
     
-    st.success("🎉 All forecasts completed!")
-else:
-    st.info("👈 Configure forecast settings in the sidebar and click 'Run Forecast' to start")
+#     st.success("🎉 All forecasts completed!")
+# else:
+#     st.info("👈 Configure forecast settings in the sidebar and click 'Run Forecast' to start")
 
