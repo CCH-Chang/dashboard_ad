@@ -41,139 +41,139 @@ date_range = st.sidebar.date_input(
     max_value=date_max.date()
 )
 
-# Filter data
-if len(date_range) == 2:
-    start_date, end_date = date_range
-    mask = (df['time'].dt.date >= start_date) & (df['time'].dt.date <= end_date)
-    filtered_df = df[mask].copy()
-else:
-    filtered_df = df.copy()
+# # Filter data
+# if len(date_range) == 2:
+#     start_date, end_date = date_range
+#     mask = (df['time'].dt.date >= start_date) & (df['time'].dt.date <= end_date)
+#     filtered_df = df[mask].copy()
+# else:
+#     filtered_df = df.copy()
 
-# Navigation tabs
-tab1, tab2, tab3 = st.sidebar.tabs(["Dashboard", "City Temps", "Forecast"])
+# # Navigation tabs
+# tab1, tab2, tab3 = st.sidebar.tabs(["Dashboard", "City Temps", "Forecast"])
 
-with tab1:
-    st.sidebar.markdown("**Dashboard Settings**")
-    show_raw_data = st.sidebar.checkbox("Show raw data", value=False)
+# with tab1:
+#     st.sidebar.markdown("**Dashboard Settings**")
+#     show_raw_data = st.sidebar.checkbox("Show raw data", value=False)
 
-with tab2:
-    st.sidebar.markdown("**City Temperature Selection**")
-    cities_dict = {
-        'Barcelona': 'temp_ Barcelona',
-        'Bilbao': 'temp_Bilbao',
-        'Madrid': 'temp_Madrid',
-        'Seville': 'temp_Seville',
-        'Valencia': 'temp_Valencia'
-    }
-    selected_cities = st.sidebar.multiselect(
-        "Select cities",
-        options=list(cities_dict.keys()),
-        default=['Barcelona', 'Madrid']
-    )
+# with tab2:
+#     st.sidebar.markdown("**City Temperature Selection**")
+#     cities_dict = {
+#         'Barcelona': 'temp_ Barcelona',
+#         'Bilbao': 'temp_Bilbao',
+#         'Madrid': 'temp_Madrid',
+#         'Seville': 'temp_Seville',
+#         'Valencia': 'temp_Valencia'
+#     }
+#     selected_cities = st.sidebar.multiselect(
+#         "Select cities",
+#         options=list(cities_dict.keys()),
+#         default=['Barcelona', 'Madrid']
+#     )
 
-with tab3:
-    st.sidebar.markdown("**Forecast Settings**")
-    forecast_days = st.sidebar.multiselect(
-        "Forecast horizon (days)",
-        options=[1, 3, 7],
-        default=[1]
-    )
-    train_ratio = st.sidebar.slider(
-        "Train-Test Split",
-        min_value=0.6,
-        max_value=0.9,
-        value=0.8,
-        step=0.05
-    )
-    run_forecast_btn = st.sidebar.button("🚀 Run Forecast", type="primary")
+# with tab3:
+#     st.sidebar.markdown("**Forecast Settings**")
+#     forecast_days = st.sidebar.multiselect(
+#         "Forecast horizon (days)",
+#         options=[1, 3, 7],
+#         default=[1]
+#     )
+#     train_ratio = st.sidebar.slider(
+#         "Train-Test Split",
+#         min_value=0.6,
+#         max_value=0.9,
+#         value=0.8,
+#         step=0.05
+#     )
+#     run_forecast_btn = st.sidebar.button("🚀 Run Forecast", type="primary")
 
-# Main title
-st.title("⚡ Energy Weather Analytics Dashboard")
-st.markdown("---")
+# # Main title
+# st.title("⚡ Energy Weather Analytics Dashboard")
+# st.markdown("---")
 
-# Key metrics
-col1, col2, col3, col4 = st.columns(4)
+# # Key metrics
+# col1, col2, col3, col4 = st.columns(4)
 
-with col1:
-    avg_load = filtered_df['total load actual'].mean()
-    st.metric(
-        label="Average Load (MW)",
-        value=f"{avg_load:,.0f}",
-        delta=f"±{filtered_df['total load actual'].std():,.0f}"
-    )
+# with col1:
+#     avg_load = filtered_df['total load actual'].mean()
+#     st.metric(
+#         label="Average Load (MW)",
+#         value=f"{avg_load:,.0f}",
+#         delta=f"±{filtered_df['total load actual'].std():,.0f}"
+#     )
 
-with col2:
-    max_load = filtered_df['total load actual'].max()
-    st.metric(
-        label="Maximum Load (MW)",
-        value=f"{max_load:,.0f}"
-    )
+# with col2:
+#     max_load = filtered_df['total load actual'].max()
+#     st.metric(
+#         label="Maximum Load (MW)",
+#         value=f"{max_load:,.0f}"
+#     )
 
-with col3:
-    avg_temp = filtered_df['temp_avg'].mean()
-    st.metric(
-        label="Average Temperature (K)",
-        value=f"{avg_temp:.2f}",
-        delta=f"±{filtered_df['temp_avg'].std():.2f}"
-    )
+# with col3:
+#     avg_temp = filtered_df['temp_avg'].mean()
+#     st.metric(
+#         label="Average Temperature (K)",
+#         value=f"{avg_temp:.2f}",
+#         delta=f"±{filtered_df['temp_avg'].std():.2f}"
+#     )
 
-with col4:
-    data_points = len(filtered_df)
-    st.metric(
-        label="Data Points",
-        value=f"{data_points:,}"
-    )
+# with col4:
+#     data_points = len(filtered_df)
+#     st.metric(
+#         label="Data Points",
+#         value=f"{data_points:,}"
+#     )
 
-st.markdown("---")
+# st.markdown("---")
 
-# Row 1: Load trend and Temperature trend
-col1, col2 = st.columns(2)
+# # Row 1: Load trend and Temperature trend
+# col1, col2 = st.columns(2)
 
-with col1:
-    st.subheader("📈 Energy Load Trend")
-    fig_load = go.Figure()
-    fig_load.add_trace(go.Scatter(
-        x=filtered_df['time'],
-        y=filtered_df['total load actual'],
-        mode='lines',
-        name='Total Load',
-        line=dict(color='#FF6B6B', width=2),
-        fill='tozeroy',
-        fillcolor='rgba(255, 107, 107, 0.2)'
-    ))
-    fig_load.update_layout(
-        title='',
-        xaxis_title='Time',
-        yaxis_title='Load (MW)',
-        hovermode='x unified',
-        template='plotly_white',
-        height=400
-    )
-    st.plotly_chart(fig_load, use_container_width=True)
+# with col1:
+#     st.subheader("📈 Energy Load Trend")
+#     fig_load = go.Figure()
+#     fig_load.add_trace(go.Scatter(
+#         x=filtered_df['time'],
+#         y=filtered_df['total load actual'],
+#         mode='lines',
+#         name='Total Load',
+#         line=dict(color='#FF6B6B', width=2),
+#         fill='tozeroy',
+#         fillcolor='rgba(255, 107, 107, 0.2)'
+#     ))
+#     fig_load.update_layout(
+#         title='',
+#         xaxis_title='Time',
+#         yaxis_title='Load (MW)',
+#         hovermode='x unified',
+#         template='plotly_white',
+#         height=400
+#     )
+#     st.plotly_chart(fig_load, use_container_width=True)
 
-with col2:
-    st.subheader("🌡️ Average Temperature Trend")
-    fig_temp = go.Figure()
-    fig_temp.add_trace(go.Scatter(
-        x=filtered_df['time'],
-        y=filtered_df['temp_avg'],
-        mode='lines',
-        name='Average Temperature',
-        line=dict(color='#4ECDC4', width=2),
-        fill='tozeroy',
-        fillcolor='rgba(78, 205, 196, 0.2)'
-    ))
-    fig_temp.update_layout(
-        title='',
-        xaxis_title='Time',
-        yaxis_title='Temperature (K)',
-        hovermode='x unified',
-        template='plotly_white',
-        height=400
-    )
-    st.plotly_chart(fig_temp, use_container_width=True)
+# with col2:
+#     st.subheader("🌡️ Average Temperature Trend")
+#     fig_temp = go.Figure()
+#     fig_temp.add_trace(go.Scatter(
+#         x=filtered_df['time'],
+#         y=filtered_df['temp_avg'],
+#         mode='lines',
+#         name='Average Temperature',
+#         line=dict(color='#4ECDC4', width=2),
+#         fill='tozeroy',
+#         fillcolor='rgba(78, 205, 196, 0.2)'
+#     ))
+#     fig_temp.update_layout(
+#         title='',
+#         xaxis_title='Time',
+#         yaxis_title='Temperature (K)',
+#         hovermode='x unified',
+#         template='plotly_white',
+#         height=400
+#     )
+#     st.plotly_chart(fig_temp, use_container_width=True)
 
-st.markdown("---")
+# st.markdown("---")
 
 # # Row 2: Temperature analysis by city
 # st.subheader("🏙️ Temperature Analysis by City")
